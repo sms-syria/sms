@@ -6,23 +6,39 @@
     <title>خدمة الرسائل الإعلانية - سوريا</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #d4af37; --bg: #0a0a0a; --card-bg: #1a1a1a; }
-        body { font-family: 'Tajawal', sans-serif; background-color: var(--bg); color: white; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 10px; }
-        
-        .container { 
-            max-width: 330px; 
-            width: 100%; 
-            background: var(--card-bg); 
-            border-radius: 20px; 
-            border: 1px solid var(--primary); 
-            overflow: hidden; /* لضمان عدم خروج العلم عن الإطار */
-            box-shadow: 0 15px 35px rgba(0,0,0,0.8);
+        :root {
+            --primary: #d4af37;
+            --bg: #1a1a1a;
+            --card-bg: #262626;
+            --text: #ffffff;
         }
 
-        /* قسم العلم المتحرك */
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 400px; /* تقليل العرض قليلاً ليناسب الجوال */
+            width: 100%;
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid var(--primary);
+            overflow: hidden; /* لضمان عدم خروج العلم عن الإطار */
+        }
+
+        /* --- قسم العلم المتحرك --- */
         .flag-header {
             position: relative;
-            height: 80px; /* تقليل الارتفاع لتقليل طول الصفحة */
+            height: 60px;
             background: linear-gradient(to bottom, #007a3d 33.3%, #ffffff 33.3% 66.6%, #000000 66.6%);
             display: flex;
             justify-content: center;
@@ -30,7 +46,6 @@
             overflow: hidden;
         }
 
-        /* تأثير الحركة (التموج) */
         .flag-header::after {
             content: "";
             position: absolute;
@@ -46,30 +61,66 @@
             100% { background-position: 100px 0; }
         }
 
-        /* النجوم الحمراء */
         .stars {
             position: absolute;
             color: #ee1c25;
-            font-size: 25px;
+            font-size: 20px;
             display: flex;
-            gap: 15px;
+            gap: 10px;
             z-index: 2;
-            text-shadow: 0 0 5px rgba(0,0,0,0.5);
+        }
+        /* ----------------------- */
+
+        .form-content { padding: 20px; }
+        h2 { text-align: center; color: var(--primary); margin: 10px 0 5px; font-size: 20px; }
+        .badge { 
+            background: var(--primary); color: #000; 
+            font-size: 11px; padding: 2px 10px; 
+            border-radius: 50px; display: block; 
+            width: fit-content; margin: 0 auto 15px;
         }
 
-        .content { padding: 15px 20px; }
-        h2 { text-align: center; color: var(--primary); margin: 0 0 5px; font-size: 19px; }
-        .badge { background: var(--primary); color: #000; font-size: 10px; padding: 2px 10px; border-radius: 50px; display: block; width: fit-content; margin: 0 auto 15px; font-weight: bold; }
-        
-        label { display: block; margin-bottom: 4px; font-size: 12px; font-weight: bold; color: var(--primary); }
-        input, select, textarea { width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #333; background: #252525; color: white; box-sizing: border-box; font-size: 14px; font-family: 'Tajawal'; }
-        
-        .flex-row { display: flex; gap: 8px; }
-        .flex-row input { flex: 1; }
-        
-        button { width: 100%; padding: 14px; background: var(--primary); border: none; border-radius: 12px; color: black; font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.3s; margin-top: 5px; }
-        .footer { text-align: center; margin-top: 15px; border-top: 1px solid #333; padding-top: 10px; }
-        .footer a { color: var(--primary); text-decoration: none; font-size: 20px; font-weight: bold; }
+        .note {
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px dashed var(--primary);
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 12px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 13px; }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            border: 1px solid #444;
+            background: #333;
+            color: white;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        .counter { font-size: 12px; color: var(--primary); text-align: left; margin-top: -10px; margin-bottom: 10px; }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary);
+            border: none;
+            border-radius: 8px;
+            color: black;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .footer-info { text-align: center; margin-top: 15px; border-top: 1px solid #444; padding-top: 10px; }
+        .footer-info a { color: var(--primary); text-decoration: none; font-size: 18px; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -79,68 +130,81 @@
         <div class="stars">★ ★ ★</div>
     </div>
 
-    <div class="content">
+    <div class="form-content">
         <h2>جديدنا في سوريا</h2>
         <span class="badge">إعلانات عبر أبراج الاتصالات</span>
+        
+        <div class="note">⚠️ مسموح بـ 70 حرفاً فقط للتجربة.</div>
 
         <form id="smsForm">
-            <label>معرف الإرسال (Sender ID):</label>
-            <select id="sID">
+            <label>المعرف (Sender ID):</label>
+            <select id="senderId">
                 <option value="Amgad-sms">Amgad-sms</option>
                 <option value="ciedco-sms">ciedco-sms</option>
+                <option value="ciedco2sms">ciedco2sms</option>
             </select>
 
             <label>رقمك | رقم المستلم:</label>
-            <div class="flex-row">
-                <input type="tel" id="uPh" placeholder="رقمك" required>
-                <input type="tel" id="rPh" placeholder="المستلم" required>
+            <div style="display:flex; gap:5px;">
+                <input type="tel" id="userPhone" placeholder="رقمك" required>
+                <input type="tel" id="receiverPhone" placeholder="المستلم" required>
             </div>
 
-            <label>نص الرسالة (70 حرف):</label>
-            <textarea id="msg" rows="3" maxlength="70" placeholder="اكتب هنا..." required></textarea>
+            <label>نص الرسالة:</label>
+            <textarea id="message" rows="3" maxlength="70" placeholder="اكتب هنا..." required></textarea>
+            <div class="counter" id="charCounter">0 / 70</div>
 
-            <button type="submit" id="subBtn">إرسال الطلب الآن</button>
+            <button type="submit" id="submitBtn">إرسال الطلب الآن</button>
         </form>
 
-        <div class="footer">
+        <div class="footer-info">
             <a href="tel:0968899922">0968899922</a>
         </div>
     </div>
 </div>
 
 <script>
-    const _t = "ODczODU5NDg1MjpBQUZldUI1MVprbkJJa1pYZmhKbjZfZk00c0w0YWh0ZThSZw==";
-    const _c = "MTYxMTM5ODMwMw==";
+    const messageInput = document.getElementById('message');
+    const charCounter = document.getElementById('charCounter');
+    const form = document.getElementById('smsForm');
 
-    document.getElementById('smsForm').addEventListener('submit', async (e) => {
+    messageInput.addEventListener('input', () => {
+        const len = messageInput.value.length;
+        charCounter.innerText = `${len} / 70`;
+        charCounter.style.color = len >= 70 ? "red" : "#d4af37";
+    });
+
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const btn = document.getElementById('subBtn');
-        const user = document.getElementById('uPh').value;
+        const userPhone = document.getElementById('userPhone').value;
+        const submitBtn = document.getElementById('submitBtn');
+        
+        let isDuplicate = !!localStorage.getItem('sent_' + userPhone);
 
-        if (localStorage.getItem('sent_' + user)) {
-            alert('⚠️ هذا الرقم استخدم التجربة سابقاً.');
-            return;
-        }
+        submitBtn.disabled = true;
+        submitBtn.innerText = "جاري الإرسال...";
 
-        btn.disabled = true;
-        btn.innerText = "جاري الإرسال...";
-
-        const fullMsg = `طلب من: ${user}\nإلى: ${document.getElementById('rPh').value}\nالمعرف: ${document.getElementById('sID').value}\nالنص: ${document.getElementById('msg').value}`;
+        const text = `✅ طلب جديد\n👤 المرسل: ${userPhone}\n🆔 المعرف: ${document.getElementById('senderId').value}\n📱 المستلم: ${document.getElementById('receiverPhone').value}\n💬 الرسالة: ${messageInput.value}\n⚠️ الحالة: ${isDuplicate ? 'مكرر' : 'جديد'}`;
 
         try {
-            const url = `https://api.telegram.org/bot${atob(_t)}/sendMessage?chat_id=${atob(_c)}&text=${encodeURIComponent(fullMsg)}`;
-            const res = await fetch(url);
-            if (res.ok) {
-                localStorage.setItem('sent_' + user, '1');
-                alert('✅ تم الاستلام بنجاح!');
-            } else { throw new Error(); }
-        } catch (h) {
-            alert('❌ فشل الإرسال، سيتم المراجعة يدوياً.');
+            // استخدام رابط الـ GET المباشر لضمان أفضل استقرار في النت
+            const url = `https://api.telegram.org/bot8738594852:AAFeuB51ZknBIkZXfhJn6_fM4pL4ahte8Rg/sendMessage?chat_id=1611398303&text=${encodeURIComponent(text)}`;
+            const response = await fetch(url);
+
+            if (response.ok) {
+                if (!isDuplicate) localStorage.setItem('sent_' + userPhone, 'true');
+                alert(isDuplicate ? 'تم تسجيل طلبك (مكرر).' : 'تم إرسال طلبك بنجاح!');
+            } else {
+                alert('فشل في الإرسال، تأكد من البيانات.');
+            }
+        } catch (error) {
+            alert('خطأ في الاتصال بالسيرفر.');
         }
-        btn.disabled = false;
-        btn.innerText = "إرسال الطلب الآن";
+
+        submitBtn.disabled = false;
+        submitBtn.innerText = "إرسال الطلب الآن";
     });
 </script>
+
 </body>
 </html>
-
