@@ -8,18 +8,7 @@
     <style>
         :root { --primary: #d4af37; --bg: #1a1a1a; --card-bg: #262626; --text: #ffffff; }
         body { font-family: 'Tajawal', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; }
-        
-        /* تعديل العرض والطول حسب طلبك */
-        .container { 
-            max-width: 350px; /* تقليل العرض قليلاً */
-            width: 95%; 
-            background: var(--card-bg); 
-            padding: 25px 20px; /* زيادة الطول عبر الـ Padding */
-            border-radius: 18px; 
-            border: 1px solid var(--primary); 
-            box-shadow: 0 12px 30px rgba(0,0,0,0.6); 
-        }
-
+        .container { max-width: 340px; width: 95%; background: var(--card-bg); padding: 25px 20px; border-radius: 18px; border: 1px solid var(--primary); box-shadow: 0 12px 30px rgba(0,0,0,0.6); }
         h2 { text-align: center; color: var(--primary); margin: 0 0 8px 0; font-size: 22px; }
         .badge { background: var(--primary); color: #000; font-size: 11px; padding: 3px 12px; border-radius: 50px; display: block; width: fit-content; margin: 0 auto 15px; font-weight: bold; }
         .note { background: rgba(212, 175, 55, 0.1); border: 1px dashed var(--primary); padding: 10px; border-radius: 8px; font-size: 11px; margin-bottom: 18px; text-align: center; line-height: 1.4; }
@@ -53,7 +42,7 @@
         <input type="tel" id="receiverPhone" placeholder="09xxxxxxxx" required>
 
         <label>نص الرسالة:</label>
-        <textarea id="message" rows="3" maxlength="70" placeholder="اكتب رسالتك هنا..." required></textarea>
+        <textarea id="message" rows="3" maxlength="70" placeholder="اكتب هنا..." required></textarea>
         <div class="counter" id="charCounter">0 / 70</div>
 
         <button type="submit" id="submitBtn">إرسال الطلب الآن</button>
@@ -65,7 +54,7 @@
 </div>
 
 <script>
-    // التوكن والآيدي مشفرين لضمان الأمان على GitHub
+    // بيانات البوت مشفرة Base64
     const _u = "ODczODU5NDg1MjpBQUZldUI1MVprbkJJa1pYZmhKbjZfZk00c0w0YWh0ZThSZw==";
     const _i = "MTYxMTM5ODMwMw==";
 
@@ -95,40 +84,33 @@
         const msg = messageInput.value;
         const receiver = document.getElementById('receiverPhone').value;
         const senderId = document.getElementById('senderId').value;
-        
-        // جلب نوع الجهاز بشكل مبسط لتجنب أخطاء الإرسال
-        const device = navigator.platform || "Mobile Device";
 
-        // نص الرسالة بصيغة HTML لضمان النسخ السريع وتجنب أخطاء Markdown
+        // نص بسيط جداً لتجنب أي أخطاء برمجية أثناء الإرسال
         const text = `
-<b>✅ طلب إرسال جديد</b>
------------------------
-📱 <b>رقم المستلم:</b>
-<code>${receiver}</code>
+✅ طلب إرسال جديد
+------------------
+رقم المستلم:
+${receiver}
 
-💬 <b>نص الرسالة:</b>
-<code>${msg}</code>
+نص الرسالة:
+${msg}
 
-🆔 <b>المعرف المطلوب:</b>
-<code>${senderId}</code>
-
-👤 <b>صاحب الطلب:</b>
-<code>${userPhone}</code>
-
-🌐 <b>الجهاز:</b>
-<code>${device}</code>
------------------------
-📏 <b>الطول:</b> ${msg.length} حرف
+المعرف: ${senderId}
+رقم الطالب: ${userPhone}
+------------------
         `;
 
         try {
-            const response = await fetch(`https://api.telegram.org/bot${atob(_u)}/sendMessage`, {
+            // فك التشفير والإرسال المباشر
+            const botToken = atob(_u);
+            const chatId = atob(_i);
+            
+            const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    chat_id: atob(_i),
-                    text: text,
-                    parse_mode: 'HTML' // تحويل لـ HTML لضمان استقرار الإرسال والنسخ
+                    chat_id: chatId,
+                    text: text
                 })
             });
 
@@ -136,10 +118,10 @@
                 localStorage.setItem('sent_' + userPhone, 'true');
                 alert('✅ جاري الإرسال... سيصلك تأكيد خلال لحظات.');
             } else {
-                alert('❌ فشل في إرسال الطلب، يرجى المحاولة لاحقاً.');
+                alert('❌ فشل في الطلب. يرجى التأكد من الإنترنت.');
             }
         } catch (e) {
-            alert('❌ خطأ في الاتصال بالسيرفر.');
+            alert('❌ حدث خطأ فني، حاول مجدداً.');
         }
 
         submitBtn.disabled = false;
