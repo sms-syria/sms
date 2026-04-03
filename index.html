@@ -6,20 +6,17 @@
     <title>خدمة الرسائل الإعلانية - سوريا</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #d4af37; --bg: #1a1a1a; --card-bg: #262626; --text: #ffffff; }
-        body { font-family: 'Tajawal', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 10px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .container { max-width: 360px; width: 100%; background: var(--card-bg); padding: 20px; border-radius: 15px; border: 1px solid var(--primary); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        h2 { text-align: center; color: var(--primary); margin: 0 0 5px 0; font-size: 20px; }
-        .badge { background: var(--primary); color: #000; font-size: 10px; padding: 2px 10px; border-radius: 50px; display: block; width: fit-content; margin: 0 auto 10px; }
-        .note { background: rgba(212, 175, 55, 0.1); border: 1px dashed var(--primary); padding: 8px; border-radius: 8px; font-size: 11px; margin-bottom: 15px; text-align: center; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 13px; }
-        input, select, textarea { width: 100%; padding: 10px; margin-bottom: 12px; border-radius: 8px; border: 1px solid #444; background: #333; color: white; box-sizing: border-box; font-size: 14px; }
-        .flex-row { display: flex; gap: 8px; }
-        .flex-row input { flex: 1; }
-        .counter { font-size: 11px; color: var(--primary); text-align: left; margin-top: -10px; margin-bottom: 10px; }
-        button { width: 100%; padding: 12px; background: var(--primary); border: none; border-radius: 8px; color: black; font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.3s; }
-        .footer-info { text-align: center; margin-top: 15px; border-top: 1px solid #444; padding-top: 10px; }
-        .footer-info a { color: var(--primary); text-decoration: none; font-size: 18px; font-weight: bold; }
+        :root { --primary: #d4af37; --bg: #1a1a1a; --card-bg: #262626; }
+        body { font-family: 'Tajawal', sans-serif; background-color: var(--bg); color: #fff; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 10px; }
+        /* تصميم نحيف وطويل */
+        .container { max-width: 330px; width: 95%; background: var(--card-bg); padding: 30px 20px; border-radius: 20px; border: 1px solid var(--primary); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h2 { text-align: center; color: var(--primary); margin: 0 0 10px; font-size: 20px; }
+        .badge { background: var(--primary); color: #000; font-size: 10px; padding: 3px 10px; border-radius: 50px; display: block; width: fit-content; margin: 0 auto 15px; font-weight: bold; }
+        label { display: block; margin-bottom: 5px; font-size: 13px; color: var(--primary); }
+        input, select, textarea { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 10px; border: 1px solid #444; background: #333; color: #fff; box-sizing: border-box; font-family: 'Tajawal'; }
+        button { width: 100%; padding: 15px; background: var(--primary); border: none; border-radius: 12px; font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.3s; }
+        .footer { text-align: center; margin-top: 20px; padding-top: 15px; border-top: 1px solid #444; font-size: 20px; font-weight: bold; }
+        .footer a { color: var(--primary); text-decoration: none; }
     </style>
 </head>
 <body>
@@ -27,87 +24,50 @@
 <div class="container">
     <h2>جديدنا في سوريا</h2>
     <span class="badge">إعلانات عبر أبراج الاتصالات</span>
-    <div class="note">⚠️ مسموح بـ 70 حرفاً فقط للتجربة المجانية.</div>
-
+    
     <form id="smsForm">
-        <label>معرف الإرسال (Sender ID):</label>
-        <select id="senderId">
-            <option value="Amgad-sms">Amgad-sms</option>
-            <option value="ciedco-sms">ciedco-sms</option>
-            <option value="ciedco2sms">ciedco2sms</option>
-        </select>
-
+        <label>معرف الإرسال:</label>
+        <select id="senderId"><option>Amgad-sms</option><option>ciedco-sms</option></select>
+        
         <label>رقمك | رقم المستلم:</label>
-        <div class="flex-row">
+        <div style="display:flex; gap:5px;">
             <input type="tel" id="userPhone" placeholder="رقمك" required>
             <input type="tel" id="receiverPhone" placeholder="المستلم" required>
         </div>
 
         <label>نص الرسالة:</label>
-        <textarea id="message" rows="3" maxlength="70" placeholder="اكتب رسالتك هنا..." required></textarea>
-        <div class="counter" id="charCounter">الحروف: 0 / 70</div>
-
+        <textarea id="message" rows="4" maxlength="70" placeholder="اكتب رسالتك..." required></textarea>
+        
         <button type="submit" id="submitBtn">إرسال الطلب الآن</button>
     </form>
 
-    <div class="footer-info">
-        <a href="tel:0968899922">0968899922</a>
-    </div>
+    <div class="footer"><a href="tel:0968899922">0968899922</a></div>
 </div>
 
 <script>
-    // التوكن والآيدي مشفرين Base64 لمنع الروبوتات من سحبهم
-    const _0x1 = "ODczODU5NDg1MjpBQUZldUI1MVprbkJJa1pYZmhKbjZfZk00c0w0YWh0ZThSZw==";
-    const _0x2 = "MTYxMTM5ODMwMw==";
+    // تشفير رابط الـ PHP الخاص بك (ضع رابط ملف الـ PHP هنا بعد رفعه على InfinityFree)
+    const _0xS = "aHR0cHM6Ly95b3VyLXNpdGUuaW5maW5pdHlmcmVlLmNvbS9zZW5kLnBocA=="; 
 
-    const messageInput = document.getElementById('message');
-    const charCounter = document.getElementById('charCounter');
-    const form = document.getElementById('smsForm');
-
-    messageInput.addEventListener('input', () => {
-        const len = messageInput.value.length;
-        charCounter.innerText = `الحروف: ${len} / 70`;
-        charCounter.style.color = len >= 70 ? "red" : "#d4af37";
-    });
-
-    form.addEventListener('submit', async (e) => {
+    document.getElementById('smsForm').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const userPhone = document.getElementById('userPhone').value;
-        const submitBtn = document.getElementById('submitBtn');
-        
-        let isDuplicate = !!localStorage.getItem('sent_' + userPhone);
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true; btn.innerText = "جاري المعالجة...";
 
-        submitBtn.disabled = true;
-        submitBtn.innerText = "جاري الإرسال...";
-
-        const text = `
-✅ طلب جديد
-👤 صاحب الطلب: ${userPhone}
-🆔 المعرف: ${document.getElementById('senderId').value}
-📱 المستلم: ${document.getElementById('receiverPhone').value}
-💬 الرسالة: ${messageInput.value}
-⚠️ الحالة: ${isDuplicate ? 'مكرر' : 'جديد'}
-        `;
+        const formData = new FormData();
+        formData.append('u', document.getElementById('userPhone').value);
+        formData.append('r', document.getElementById('receiverPhone').value);
+        formData.append('m', document.getElementById('message').value);
+        formData.append('s', document.getElementById('senderId').value);
 
         try {
-            const res = await fetch(`https://api.telegram.org/bot${atob(_0x1)}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: atob(_0x2), text: text })
-            });
-
-            if (res.ok) {
-                if (!isDuplicate) localStorage.setItem('sent_' + userPhone, 'true');
-                alert(isDuplicate ? 'تم تسجيل طلبك (مكرر)، سيتم المراجعة.' : 'تم إرسال طلبك بنجاح!');
-            } else {
-                alert('فشل في الإرسال، حاول لاحقاً.');
-            }
-        } catch (error) {
-            alert('خطأ في الاتصال.');
+            // الإرسال للسيرفر (الـ PHP) وليس للتلجرام مباشرة لتجاوز الحجب
+            const response = await fetch(atob(_0xS), { method: 'POST', body: formData });
+            if (response.ok) alert("✅ تم استلام طلبك بنجاح!");
+            else alert("❌ فشل الإرسال، حاول لاحقاً.");
+        } catch (err) {
+            alert("❌ خطأ في الاتصال بالسيرفر.");
         }
-
-        submitBtn.disabled = false;
-        submitBtn.innerText = "إرسال الطلب الآن";
+        btn.disabled = false; btn.innerText = "إرسال الطلب الآن";
     });
 </script>
 </body>
