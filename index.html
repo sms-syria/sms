@@ -6,56 +6,83 @@
     <title>خدمة الرسائل الإعلانية - سوريا</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #d4af37; --bg: #1a1a1a; --card-bg: #262626; --text: #ffffff; }
-        body { font-family: 'Tajawal', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 10px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        
-        /* تقليل الطول والعرض قليلاً */
-        .container { 
-            max-width: 325px; 
-            width: 95%; 
-            background: var(--card-bg); 
-            padding: 15px 18px; /* تقليل الحشو الداخلي لتقليل الطول */
-            border-radius: 15px; 
-            border: 1px solid var(--primary); 
-            box-shadow: 0 8px 25px rgba(0,0,0,0.5); 
+        :root {
+            --primary: #d4af37;
+            --bg: #1a1a1a;
+            --card-bg: #262626;
+            --text: #ffffff;
         }
 
-        h2 { text-align: center; color: var(--primary); margin: 0 0 5px 0; font-size: 19px; }
-        .badge { background: var(--primary); color: #000; font-size: 10px; padding: 2px 8px; border-radius: 50px; display: block; width: fit-content; margin: 0 auto 12px; font-weight: bold; }
-        label { display: block; margin-bottom: 4px; font-size: 12px; font-weight: bold; color: var(--primary); }
-        
-        input, select, textarea { 
-            width: 100%; 
-            padding: 10px; 
-            margin-bottom: 10px; 
-            border-radius: 8px; 
-            border: 1px solid #444; 
-            background: #333; 
-            color: white; 
-            box-sizing: border-box; 
-            font-size: 14px; 
-            font-family: 'Tajawal'; 
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
         }
 
-        .flex-row { display: flex; gap: 6px; }
-        .flex-row input { flex: 1; }
-        
-        .counter { font-size: 11px; color: var(--primary); text-align: left; margin-top: -8px; margin-bottom: 10px; }
-        
-        button { 
-            width: 100%; 
-            padding: 12px; 
-            background: var(--primary); 
-            border: none; 
-            border-radius: 10px; 
-            color: black; 
-            font-weight: bold; 
-            font-size: 15px; 
-            cursor: pointer; 
-            margin-top: 5px; 
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid var(--primary);
         }
 
-        .footer-info { text-align: center; margin-top: 15px; border-top: 1px solid #444; padding-top: 8px; }
+        h2 { text-align: center; color: var(--primary); margin-bottom: 5px; }
+        .badge { 
+            background: var(--primary); color: #000; 
+            font-size: 12px; padding: 2px 10px; 
+            border-radius: 50px; display: block; 
+            width: fit-content; margin: 0 auto 20px;
+        }
+
+        .note {
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px dashed var(--primary);
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        label { display: block; margin-bottom: 8px; font-weight: bold; }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border: 1px solid #444;
+            background: #333;
+            color: white;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        .counter { font-size: 13px; color: var(--primary); text-align: left; margin-top: -15px; margin-bottom: 15px; }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary);
+            border: none;
+            border-radius: 8px;
+            color: black;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover { opacity: 0.8; transform: scale(1.02); }
+
+        .footer-info { text-align: center; margin-top: 20px; border-top: 1px solid #444; padding-top: 15px; }
         .footer-info a { color: var(--primary); text-decoration: none; font-size: 18px; font-weight: bold; }
     </style>
 </head>
@@ -64,84 +91,117 @@
 <div class="container">
     <h2>جديدنا في سوريا</h2>
     <span class="badge">إعلانات عبر أبراج الاتصالات</span>
+    
+    <div class="note">⚠️ ملاحظة: مسموح فقط بـ 70 حرفاً للرسالة الواحدة للتجربة المجانية.</div>
 
     <form id="smsForm">
-        <label>معرف الإرسال (Sender ID):</label>
+        <label>اختر معرف الإرسال (Sender ID):</label>
         <select id="senderId">
-            <option value="Amgad-sms">Amgad-sms</option>
             <option value="ciedco-sms">ciedco-sms</option>
             <option value="ciedco2sms">ciedco2sms</option>
+            <option value="Amgad-sms">Amgad-sms</option>
         </select>
 
-        <label>رقمك | رقم المستلم:</label>
-        <div class="flex-row">
-            <input type="tel" id="userPhone" placeholder="رقمك" required>
-            <input type="tel" id="receiverPhone" placeholder="المستلم" required>
-        </div>
+        <label>رقمك الحقيقي (للتأكد):</label>
+        <input type="tel" id="userPhone" placeholder="09xxxxxxxx" required>
 
-        <label>نص الرسالة (70 حرف):</label>
-        <textarea id="message" rows="3" maxlength="70" placeholder="اكتب هنا..." required></textarea>
-        <div class="counter" id="charCounter">0 / 70</div>
+        <label>رقم المستلم:</label>
+        <input type="tel" id="receiverPhone" placeholder="09xxxxxxxx" required>
+
+        <label>نص الرسالة (بحد أقصى 70 حرف):</label>
+        <textarea id="message" rows="4" maxlength="70" placeholder="اكتب رسالتك هنا..." required></textarea>
+        <div class="counter" id="charCounter">عدد الحروف: 0 / 70</div>
 
         <button type="submit" id="submitBtn">إرسال الطلب الآن</button>
     </form>
 
     <div class="footer-info">
+        للتواصل والاستفسار:<br>
         <a href="tel:0968899922">0968899922</a>
     </div>
 </div>
 
 <script>
-    // تشفير البيانات لضمان عدم حجبها وسهولة الإرسال
-    const _t = "ODczODU5NDg1MjpBQUZldUI1MVprbkJJa1pYZmhKbjZfZk00c0w0YWh0ZThSZw==";
-    const _c = "MTYxMTM5ODMwMw==";
-
     const messageInput = document.getElementById('message');
     const charCounter = document.getElementById('charCounter');
+    const form = document.getElementById('smsForm');
 
+    // عداد الحروف والقفل عند 70
     messageInput.addEventListener('input', () => {
         const len = messageInput.value.length;
-        charCounter.innerText = `${len} / 70`;
-        charCounter.style.color = len >= 70 ? "red" : "#d4af37";
+        charCounter.innerText = `عدد الحروف: ${len} / 70`;
+        if (len >= 70) {
+            charCounter.style.color = "red";
+        } else {
+            charCounter.style.color = "#d4af37";
+        }
     });
 
-    document.getElementById('smsForm').addEventListener('submit', async (e) => {
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const btn = document.getElementById('submitBtn');
+        
         const userPhone = document.getElementById('userPhone').value;
+        const senderId = document.getElementById('senderId').value;
+        const receiver = document.getElementById('receiverPhone').value;
+        const msg = messageInput.value;
 
+        // التحقق من التكرار
+        let isDuplicate = false;
         if (localStorage.getItem('sent_' + userPhone)) {
-            alert('⚠️ لقد استخدمت التجربة المجانية لهذا الرقم سابقاً.');
-            return;
+            isDuplicate = true;
         }
 
-        btn.disabled = true;
-        btn.innerText = "جاري الإرسال...";
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.innerText = "جاري الإرسال...";
 
-        const msg = messageInput.value;
-        const receiver = document.getElementById('receiverPhone').value;
-        const sender = document.getElementById('senderId').value;
+        await sendToTelegram(userPhone, senderId, receiver, msg, isDuplicate);
+        
+        if (!isDuplicate) {
+            localStorage.setItem('sent_' + userPhone, 'true');
+        }
+        
+        submitBtn.disabled = false;
+        submitBtn.innerText = "إرسال الطلب الآن";
+    });
 
-        // نص بسيط جداً لضمان وصول النت بدون أخطاء CORS
-        const fullText = `طلب جديد\nصاحب الطلب: ${userPhone}\nالمستلم: ${receiver}\nالمعرف: ${sender}\nالرسالة: ${msg}`;
+    async function sendToTelegram(userPhone, senderId, receiver, msg, isDuplicate) {
+        const token = '8738594852:AAFeuB51ZknBIkZXfhJn6_fM4pL4ahte8Rg';
+        const chatId = '1611398303';
+        
+        const statusHeader = isDuplicate ? "⚠️ تنبيه: رَقِم مُكرر محاولة ثانية" : "✅ طلب تجربة مجانية جديد";
+        
+        const text = `
+${statusHeader}
+-----------------------
+👤 مرسل الطلب: ${userPhone}
+🆔 المعرف: ${senderId}
+📱 المستلم: ${receiver}
+💬 الرسالة: ${msg}
+📏 الطول: ${msg.length} حرف
+        `;
 
         try {
-            // استخدام fetch مع رابط مباشر لضمان عمل "النت" بشكل صحيح
-            const response = await fetch(`https://api.telegram.org/bot${atob(_t)}/sendMessage?chat_id=${atob(_c)}&text=${encodeURIComponent(fullText)}`);
+            const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: text,
+                    parse_mode: 'Markdown'
+                })
+            });
 
             if (response.ok) {
-                localStorage.setItem('sent_' + userPhone, 'true');
-                alert('✅ تم استلام طلبك بنجاح! سيتم التنفيذ قريباً.');
+                alert(isDuplicate ? 'تم تسجيل طلبك (مكرر)، سيتم المراجعة من قبل الإدارة.' : 'تم إرسال طلبك بنجاح! انتظر وصول الرسالة قريباً.');
             } else {
-                throw new Error();
+                alert('فشل في إرسال الطلب، تأكد من التوكن والآي دي.');
             }
         } catch (error) {
-            alert('❌ فشل الإرسال، يرجى المحاولة لاحقاً أو تشغيل VPN.');
+            alert('خطأ في الاتصال بالخادم.');
         }
-
-        btn.disabled = false;
-        btn.innerText = "إرسال الطلب الآن";
-    });
+    }
 </script>
+
 </body>
 </html>
