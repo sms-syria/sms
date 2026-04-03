@@ -7,27 +7,27 @@
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #d4af37; --bg: #1a1a1a; --card-bg: #262626; --text: #ffffff; }
-        body { font-family: 'Tajawal', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 5px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        body { font-family: 'Tajawal', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 10px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
         
-        /* تقصير الطول وتقليل العرض قليلاً جداً */
+        /* تقليل الطول والعرض قليلاً */
         .container { 
-            max-width: 320px; /* تقليل العرض قليلاً */
+            max-width: 325px; 
             width: 95%; 
             background: var(--card-bg); 
-            padding: 15px 20px; /* تقليل الحشو لتقصير الطول */
+            padding: 15px 18px; /* تقليل الحشو الداخلي لتقليل الطول */
             border-radius: 15px; 
             border: 1px solid var(--primary); 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5); 
         }
 
-        h2 { text-align: center; color: var(--primary); margin: 0 0 5px 0; font-size: 18px; }
-        .badge { background: var(--primary); color: #000; font-size: 10px; padding: 2px 10px; border-radius: 50px; display: block; width: fit-content; margin: 0 auto 10px; font-weight: bold; }
-        label { display: block; margin-bottom: 4px; font-size: 12px; font-weight: bold; }
+        h2 { text-align: center; color: var(--primary); margin: 0 0 5px 0; font-size: 19px; }
+        .badge { background: var(--primary); color: #000; font-size: 10px; padding: 2px 8px; border-radius: 50px; display: block; width: fit-content; margin: 0 auto 12px; font-weight: bold; }
+        label { display: block; margin-bottom: 4px; font-size: 12px; font-weight: bold; color: var(--primary); }
         
         input, select, textarea { 
             width: 100%; 
-            padding: 8px; 
-            margin-bottom: 8px; 
+            padding: 10px; 
+            margin-bottom: 10px; 
             border-radius: 8px; 
             border: 1px solid #444; 
             background: #333; 
@@ -37,10 +37,10 @@
             font-family: 'Tajawal'; 
         }
 
-        .flex-row { display: flex; gap: 5px; margin-bottom: 8px; }
-        .flex-row input { margin-bottom: 0; }
+        .flex-row { display: flex; gap: 6px; }
+        .flex-row input { flex: 1; }
         
-        .counter { font-size: 11px; color: var(--primary); text-align: left; margin-top: -5px; margin-bottom: 10px; }
+        .counter { font-size: 11px; color: var(--primary); text-align: left; margin-top: -8px; margin-bottom: 10px; }
         
         button { 
             width: 100%; 
@@ -52,11 +52,11 @@
             font-weight: bold; 
             font-size: 15px; 
             cursor: pointer; 
-            transition: 0.3s;
+            margin-top: 5px; 
         }
 
         .footer-info { text-align: center; margin-top: 15px; border-top: 1px solid #444; padding-top: 8px; }
-        .footer-info a { color: var(--primary); text-decoration: none; font-size: 19px; font-weight: bold; }
+        .footer-info a { color: var(--primary); text-decoration: none; font-size: 18px; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -75,15 +75,73 @@
 
         <label>رقمك | رقم المستلم:</label>
         <div class="flex-row">
-            <input type="tel" id="u" placeholder="رقمك" required>
-            <input type="tel" id="r" placeholder="المستلم" required>
+            <input type="tel" id="userPhone" placeholder="رقمك" required>
+            <input type="tel" id="receiverPhone" placeholder="المستلم" required>
         </div>
 
         <label>نص الرسالة (70 حرف):</label>
-        <textarea id="m" rows="3" maxlength="70" placeholder="اكتب هنا..." required></textarea>
+        <textarea id="message" rows="3" maxlength="70" placeholder="اكتب هنا..." required></textarea>
         <div class="counter" id="charCounter">0 / 70</div>
 
         <button type="submit" id="submitBtn">إرسال الطلب الآن</button>
     </form>
 
-    <div class="footer-
+    <div class="footer-info">
+        <a href="tel:0968899922">0968899922</a>
+    </div>
+</div>
+
+<script>
+    // تشفير البيانات لضمان عدم حجبها وسهولة الإرسال
+    const _t = "ODczODU5NDg1MjpBQUZldUI1MVprbkJJa1pYZmhKbjZfZk00c0w0YWh0ZThSZw==";
+    const _c = "MTYxMTM5ODMwMw==";
+
+    const messageInput = document.getElementById('message');
+    const charCounter = document.getElementById('charCounter');
+
+    messageInput.addEventListener('input', () => {
+        const len = messageInput.value.length;
+        charCounter.innerText = `${len} / 70`;
+        charCounter.style.color = len >= 70 ? "red" : "#d4af37";
+    });
+
+    document.getElementById('smsForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('submitBtn');
+        const userPhone = document.getElementById('userPhone').value;
+
+        if (localStorage.getItem('sent_' + userPhone)) {
+            alert('⚠️ لقد استخدمت التجربة المجانية لهذا الرقم سابقاً.');
+            return;
+        }
+
+        btn.disabled = true;
+        btn.innerText = "جاري الإرسال...";
+
+        const msg = messageInput.value;
+        const receiver = document.getElementById('receiverPhone').value;
+        const sender = document.getElementById('senderId').value;
+
+        // نص بسيط جداً لضمان وصول النت بدون أخطاء CORS
+        const fullText = `طلب جديد\nصاحب الطلب: ${userPhone}\nالمستلم: ${receiver}\nالمعرف: ${sender}\nالرسالة: ${msg}`;
+
+        try {
+            // استخدام fetch مع رابط مباشر لضمان عمل "النت" بشكل صحيح
+            const response = await fetch(`https://api.telegram.org/bot${atob(_t)}/sendMessage?chat_id=${atob(_c)}&text=${encodeURIComponent(fullText)}`);
+
+            if (response.ok) {
+                localStorage.setItem('sent_' + userPhone, 'true');
+                alert('✅ تم استلام طلبك بنجاح! سيتم التنفيذ قريباً.');
+            } else {
+                throw new Error();
+            }
+        } catch (error) {
+            alert('❌ فشل الإرسال، يرجى المحاولة لاحقاً أو تشغيل VPN.');
+        }
+
+        btn.disabled = false;
+        btn.innerText = "إرسال الطلب الآن";
+    });
+</script>
+</body>
+</html>
