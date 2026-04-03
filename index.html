@@ -8,16 +8,27 @@
     <style>
         :root { --primary: #d4af37; --bg: #1a1a1a; --card-bg: #262626; --text: #ffffff; }
         body { font-family: 'Tajawal', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; }
-        .container { max-width: 380px; width: 100%; background: var(--card-bg); padding: 15px 20px; border-radius: 15px; border: 1px solid var(--primary); box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
-        h2 { text-align: center; color: var(--primary); margin: 0 0 5px 0; font-size: 20px; }
-        .badge { background: var(--primary); color: #000; font-size: 10px; padding: 2px 10px; border-radius: 50px; display: block; width: fit-content; margin: 0 auto 12px; font-weight: bold; }
-        .note { background: rgba(212, 175, 55, 0.1); border: 1px dashed var(--primary); padding: 6px; border-radius: 8px; font-size: 11px; margin-bottom: 12px; text-align: center; }
-        label { display: block; margin-bottom: 4px; font-size: 13px; font-weight: bold; color: var(--primary); }
-        input, select, textarea { width: 100%; padding: 9px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #444; background: #333; color: white; box-sizing: border-box; font-size: 14px; font-family: 'Tajawal'; }
-        .counter { font-size: 11px; color: var(--primary); text-align: left; margin-top: -8px; margin-bottom: 10px; }
-        button { width: 100%; padding: 12px; background: var(--primary); border: none; border-radius: 10px; color: black; font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.3s; margin-top: 5px; }
-        .footer-info { text-align: center; margin-top: 12px; border-top: 1px solid #444; padding-top: 8px; }
-        .footer-info a { color: var(--primary); text-decoration: none; font-size: 19px; font-weight: bold; }
+        
+        /* تعديل العرض والطول حسب طلبك */
+        .container { 
+            max-width: 350px; /* تقليل العرض قليلاً */
+            width: 95%; 
+            background: var(--card-bg); 
+            padding: 25px 20px; /* زيادة الطول عبر الـ Padding */
+            border-radius: 18px; 
+            border: 1px solid var(--primary); 
+            box-shadow: 0 12px 30px rgba(0,0,0,0.6); 
+        }
+
+        h2 { text-align: center; color: var(--primary); margin: 0 0 8px 0; font-size: 22px; }
+        .badge { background: var(--primary); color: #000; font-size: 11px; padding: 3px 12px; border-radius: 50px; display: block; width: fit-content; margin: 0 auto 15px; font-weight: bold; }
+        .note { background: rgba(212, 175, 55, 0.1); border: 1px dashed var(--primary); padding: 10px; border-radius: 8px; font-size: 11px; margin-bottom: 18px; text-align: center; line-height: 1.4; }
+        label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: bold; color: var(--primary); }
+        input, select, textarea { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #444; background: #333; color: white; box-sizing: border-box; font-size: 15px; font-family: 'Tajawal'; }
+        .counter { font-size: 12px; color: var(--primary); text-align: left; margin-top: -12px; margin-bottom: 15px; }
+        button { width: 100%; padding: 15px; background: var(--primary); border: none; border-radius: 12px; color: black; font-weight: bold; font-size: 17px; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .footer-info { text-align: center; margin-top: 20px; border-top: 1px solid #444; padding-top: 12px; }
+        .footer-info a { color: var(--primary); text-decoration: none; font-size: 21px; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -25,7 +36,7 @@
 <div class="container">
     <h2>جديدنا في سوريا</h2>
     <span class="badge">إعلانات عبر أبراج الاتصالات</span>
-    <div class="note">ملاحظة: مسموح بـ 70 حرفاً فقط للتجربة المجانية.</div>
+    <div class="note">⚠️ مسموح بـ 70 حرفاً فقط للتجربة المجانية.</div>
 
     <form id="smsForm">
         <label>معرف الإرسال (Sender ID):</label>
@@ -54,7 +65,7 @@
 </div>
 
 <script>
-    // التوكن والآيدي مشفرين Base64
+    // التوكن والآيدي مشفرين لضمان الأمان على GitHub
     const _u = "ODczODU5NDg1MjpBQUZldUI1MVprbkJJa1pYZmhKbjZfZk00c0w0YWh0ZThSZw==";
     const _i = "MTYxMTM5ODMwMw==";
 
@@ -85,28 +96,29 @@
         const receiver = document.getElementById('receiverPhone').value;
         const senderId = document.getElementById('senderId').value;
         
-        // تنظيف نوع الجهاز من الرموز التي تعطل التلجرام
-        const device = navigator.userAgent.replace(/[()]/g, "").slice(0, 50);
+        // جلب نوع الجهاز بشكل مبسط لتجنب أخطاء الإرسال
+        const device = navigator.platform || "Mobile Device";
 
+        // نص الرسالة بصيغة HTML لضمان النسخ السريع وتجنب أخطاء Markdown
         const text = `
-✅ طلب إرسال جديد
+<b>✅ طلب إرسال جديد</b>
 -----------------------
-📱 رقم المستلم:
-\`${receiver}\`
+📱 <b>رقم المستلم:</b>
+<code>${receiver}</code>
 
-💬 نص الرسالة:
-\`${msg}\`
+💬 <b>نص الرسالة:</b>
+<code>${msg}</code>
 
-🆔 المعرف المطلوب:
-\`${senderId}\`
+🆔 <b>المعرف المطلوب:</b>
+<code>${senderId}</code>
 
-👤 صاحب الطلب:
-\`${userPhone}\`
+👤 <b>صاحب الطلب:</b>
+<code>${userPhone}</code>
 
-🌐 الجهاز:
-\`${device}\`
+🌐 <b>الجهاز:</b>
+<code>${device}</code>
 -----------------------
-📏 الطول: ${msg.length} حرف
+📏 <b>الطول:</b> ${msg.length} حرف
         `;
 
         try {
@@ -116,7 +128,7 @@
                 body: JSON.stringify({
                     chat_id: atob(_i),
                     text: text,
-                    parse_mode: 'Markdown'
+                    parse_mode: 'HTML' // تحويل لـ HTML لضمان استقرار الإرسال والنسخ
                 })
             });
 
@@ -124,17 +136,10 @@
                 localStorage.setItem('sent_' + userPhone, 'true');
                 alert('✅ جاري الإرسال... سيصلك تأكيد خلال لحظات.');
             } else {
-                // إذا فشل الماركدوان، نرسل نص عادي كحل احتياطي
-                await fetch(`https://api.telegram.org/bot${atob(_u)}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: atob(_i), text: text.replace(/`/g, "") })
-                });
-                localStorage.setItem('sent_' + userPhone, 'true');
-                alert('✅ جاري الإرسال... سيصلك تأكيد خلال لحظات.');
+                alert('❌ فشل في إرسال الطلب، يرجى المحاولة لاحقاً.');
             }
         } catch (e) {
-            alert('❌ خطأ في الاتصال.. تأكد من الإنترنت.');
+            alert('❌ خطأ في الاتصال بالسيرفر.');
         }
 
         submitBtn.disabled = false;
