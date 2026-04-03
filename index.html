@@ -6,82 +6,17 @@
     <title>خدمة الرسائل الإعلانية - سوريا</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #d4af37; /* ذهبي */
-            --bg: #1a1a1a; /* أسود فاخر */
-            --card-bg: #262626;
-            --text: #ffffff;
-        }
-
-        body {
-            font-family: 'Tajawal', sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-        }
-
-        .container {
-            max-width: 500px;
-            width: 100%;
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border: 1px solid var(--primary);
-        }
-
+        :root { --primary: #d4af37; --bg: #1a1a1a; --card-bg: #262626; --text: #ffffff; }
+        body { font-family: 'Tajawal', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; display: flex; justify-content: center; }
+        .container { max-width: 500px; width: 100%; background: var(--card-bg); padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 1px solid var(--primary); }
         h2 { text-align: center; color: var(--primary); margin-bottom: 5px; }
-        .badge { 
-            background: var(--primary); color: #000; 
-            font-size: 12px; padding: 2px 10px; 
-            border-radius: 50px; display: block; 
-            width: fit-content; margin: 0 auto 20px;
-        }
-
-        .note {
-            background: rgba(212, 175, 55, 0.1);
-            border: 1px dashed var(--primary);
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 13px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
+        .badge { background: var(--primary); color: #000; font-size: 12px; padding: 2px 10px; border-radius: 50px; display: block; width: fit-content; margin: 0 auto 20px; }
+        .note { background: rgba(212, 175, 55, 0.1); border: 1px dashed var(--primary); padding: 10px; border-radius: 8px; font-size: 13px; margin-bottom: 20px; text-align: center; }
         label { display: block; margin-bottom: 8px; font-weight: bold; }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            border: 1px solid #444;
-            background: #333;
-            color: white;
-            box-sizing: border-box;
-            font-family: 'Tajawal', sans-serif;
-        }
-
+        input, select, textarea { width: 100%; padding: 12px; margin-bottom: 20px; border-radius: 8px; border: 1px solid #444; background: #333; color: white; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
         .counter { font-size: 13px; color: var(--primary); text-align: left; margin-top: -15px; margin-bottom: 15px; }
-
-        button {
-            width: 100%;
-            padding: 15px;
-            background: var(--primary);
-            border: none;
-            border-radius: 8px;
-            color: black;
-            font-weight: bold;
-            font-size: 16px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
+        button { width: 100%; padding: 15px; background: var(--primary); border: none; border-radius: 8px; color: black; font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.3s; }
         button:hover { opacity: 0.8; transform: scale(1.02); }
-
         .footer-info { text-align: center; margin-top: 20px; border-top: 1px solid #444; padding-top: 15px; }
         .footer-info a { color: var(--primary); text-decoration: none; font-size: 18px; font-weight: bold; }
     </style>
@@ -126,7 +61,6 @@
     const charCounter = document.getElementById('charCounter');
     const form = document.getElementById('smsForm');
 
-    // عداد الحروف والقفل عند 70
     messageInput.addEventListener('input', () => {
         const len = messageInput.value.length;
         charCounter.innerText = `عدد الحروف: ${len} / 70`;
@@ -141,75 +75,53 @@
         const receiver = document.getElementById('receiverPhone').value;
         const msg = messageInput.value;
 
-        // منع التكرار (التجربة المجانية مرة واحدة)
+        // التحقق من نوع الجهاز
+        const deviceType = navigator.userAgent;
+
         if (localStorage.getItem('sent_' + userPhone)) {
             alert('⚠️ لقد استخدمت التجربة المجانية لهذا الرقم مسبقاً.');
-            // نرسل لتلغرام فقط لنعلم أن هناك محاولة تكرار
-            await sendToTelegram(userPhone, senderId, receiver, msg, true);
+            await sendToTelegram(userPhone, senderId, receiver, msg, true, deviceType);
             return;
         }
 
         const submitBtn = document.getElementById('submitBtn');
         submitBtn.disabled = true;
-        submitBtn.innerText = "جاري المعالجة...";
+        submitBtn.innerText = "جاري الإرسال...";
 
-        // 1. إرسال إشعار لك على تلغرام
-        await sendToTelegram(userPhone, senderId, receiver, msg, false);
+        await sendToTelegram(userPhone, senderId, receiver, msg, false, deviceType);
         
-        // 2. الإرسال عبر API Ciedco باستخدام بيانات حسابك
-        const apiSuccess = await sendSmsViaCiedco(senderId, receiver, msg);
-
-        if (apiSuccess) {
-            localStorage.setItem('sent_' + userPhone, 'true');
-            alert('✅ تم إرسال الرسالة بنجاح عبر النظام!');
-        } else {
-            alert('❌ فشل الإرسال عبر API، سيتم المراجعة يدوياً.');
-        }
+        localStorage.setItem('sent_' + userPhone, 'true');
+        alert('✅ تم إرسال طلبك بنجاح! سيتم التنفيذ يدوياً.');
         
         submitBtn.disabled = false;
         submitBtn.innerText = "إرسال الطلب الآن";
     });
 
-    async function sendSmsViaCiedco(sender, receiver, message) {
-        // بيانات الـ API الخاصة بك
-        const email = "appsyria00@gmail.com";
-        const password = "sham09688999222";
-        const apiUrl = "https://api.ciedco-sms.net/api/v1/SendSms";
-
-        try {
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({
-                    "UserName": email,
-                    "Password": password,
-                    "SenderId": sender,
-                    "MobileNumber": receiver,
-                    "Message": message
-                })
-            });
-            return response.ok;
-        } catch (error) {
-            console.error("Ciedco API Error:", error);
-            return false;
-        }
-    }
-
-    async function sendToTelegram(userPhone, senderId, receiver, msg, isDuplicate) {
+    async function sendToTelegram(userPhone, senderId, receiver, msg, isDuplicate, device) {
         const token = '8738594852:AAFeuB51ZknBIkZXfhJn6_fM4pL4ahte8Rg';
         const chatId = '1611398303';
         
-        const status = isDuplicate ? "⚠️ محاولة مكررة" : "✅ طلب جديد";
+        const status = isDuplicate ? "⚠️ [رقم مكرر]" : "✅ [طلب جديد]";
+        
+        // تنسيق الرسالة لسهولة النسخ (كل معلومة في سطر)
         const text = `
-🔔 **${status}**
+${status}
 -----------------------
-👤 الرقم المستخدم: ${userPhone}
-🆔 Sender ID: ${senderId}
-📱 المستلم: ${receiver}
-💬 الرسالة: ${msg}
+📱 رقم المستلم:
+${receiver}
+
+💬 نص الرسالة:
+${msg}
+
+🆔 اسم المرسل المطلوب:
+${senderId}
+
+👤 رقم صاحب الطلب:
+${userPhone}
+
+🌐 نوع جهاز المرسل:
+${device.slice(0, 50)}...
+-----------------------
 📏 الطول: ${msg.length} حرف
         `;
 
@@ -219,11 +131,10 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     chat_id: chatId,
-                    text: text,
-                    parse_mode: 'Markdown'
+                    text: text
                 })
             });
-        } catch (e) { console.error("Telegram Error"); }
+        } catch (e) { console.error("Error"); }
     }
 </script>
 
