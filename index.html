@@ -7,8 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #d4af37;
-            --bg: #1a1a1a;
+            --primary: #d4af37; /* ذهبي */
+            --bg: #1a1a1a; /* أسود فاخر */
             --card-bg: #262626;
             --text: #ffffff;
         }
@@ -130,11 +130,7 @@
     messageInput.addEventListener('input', () => {
         const len = messageInput.value.length;
         charCounter.innerText = `عدد الحروف: ${len} / 70`;
-        if (len >= 70) {
-            charCounter.style.color = "red";
-        } else {
-            charCounter.style.color = "#d4af37";
-        }
+        charCounter.style.color = len >= 70 ? "red" : "#d4af37";
     });
 
     form.addEventListener('submit', async (e) => {
@@ -145,44 +141,80 @@
         const receiver = document.getElementById('receiverPhone').value;
         const msg = messageInput.value;
 
-        // التحقق من التكرار
-        let isDuplicate = false;
+        // منع التكرار (التجربة المجانية مرة واحدة)
         if (localStorage.getItem('sent_' + userPhone)) {
-            isDuplicate = true;
+            alert('⚠️ لقد استخدمت التجربة المجانية لهذا الرقم مسبقاً.');
+            // نرسل لتلغرام فقط لنعلم أن هناك محاولة تكرار
+            await sendToTelegram(userPhone, senderId, receiver, msg, true);
+            return;
         }
 
         const submitBtn = document.getElementById('submitBtn');
         submitBtn.disabled = true;
-        submitBtn.innerText = "جاري الإرسال...";
+        submitBtn.innerText = "جاري المعالجة...";
 
-        await sendToTelegram(userPhone, senderId, receiver, msg, isDuplicate);
+        // 1. إرسال إشعار لك على تلغرام
+        await sendToTelegram(userPhone, senderId, receiver, msg, false);
         
-        if (!isDuplicate) {
+        // 2. الإرسال عبر API Ciedco باستخدام بيانات حسابك
+        const apiSuccess = await sendSmsViaCiedco(senderId, receiver, msg);
+
+        if (apiSuccess) {
             localStorage.setItem('sent_' + userPhone, 'true');
+            alert('✅ تم إرسال الرسالة بنجاح عبر النظام!');
+        } else {
+            alert('❌ فشل الإرسال عبر API، سيتم المراجعة يدوياً.');
         }
         
         submitBtn.disabled = false;
         submitBtn.innerText = "إرسال الطلب الآن";
     });
 
+    async function sendSmsViaCiedco(sender, receiver, message) {
+        // بيانات الـ API الخاصة بك
+        const email = "appsyria00@gmail.com";
+        const password = "sham09688999222";
+        const apiUrl = "https://api.ciedco-sms.net/api/v1/SendSms";
+
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    "UserName": email,
+                    "Password": password,
+                    "SenderId": sender,
+                    "MobileNumber": receiver,
+                    "Message": message
+                })
+            });
+            return response.ok;
+        } catch (error) {
+            console.error("Ciedco API Error:", error);
+            return false;
+        }
+    }
+
     async function sendToTelegram(userPhone, senderId, receiver, msg, isDuplicate) {
         const token = '8738594852:AAFeuB51ZknBIkZXfhJn6_fM4pL4ahte8Rg';
         const chatId = '1611398303';
         
-        const statusHeader = isDuplicate ? "⚠️ تنبيه: رَقِم مُكرر محاولة ثانية" : "✅ طلب تجربة مجانية جديد";
-        
+        const status = isDuplicate ? "⚠️ محاولة مكررة" : "✅ طلب جديد";
         const text = `
-${statusHeader}
+🔔 **${status}**
 -----------------------
-👤 مرسل الطلب: ${userPhone}
-🆔 المعرف: ${senderId}
+👤 الرقم المستخدم: ${userPhone}
+🆔 Sender ID: ${senderId}
 📱 المستلم: ${receiver}
 💬 الرسالة: ${msg}
 📏 الطول: ${msg.length} حرف
         `;
 
         try {
-            const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+            await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -191,15 +223,7 @@ ${statusHeader}
                     parse_mode: 'Markdown'
                 })
             });
-
-            if (response.ok) {
-                alert(isDuplicate ? 'تم تسجيل طلبك (مكرر)، سيتم المراجعة من قبل الإدارة.' : 'تم إرسال طلبك بنجاح! انتظر وصول الرسالة قريباً.');
-            } else {
-                alert('فشل في إرسال الطلب، تأكد من التوكن والآي دي.');
-            }
-        } catch (error) {
-            alert('خطأ في الاتصال بالخادم.');
-        }
+        } catch (e) { console.error("Telegram Error"); }
     }
 </script>
 
