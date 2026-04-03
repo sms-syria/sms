@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خدمة الرسائل الإعلانية - سوريا</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #d4af37; /* ذهبي */
+            --bg: #1a1a1a; /* أسود فاخر */
+            --card-bg: #262626;
+            --text: #ffffff;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid var(--primary);
+        }
+
+        h2 { text-align: center; color: var(--primary); margin-bottom: 5px; }
+        .badge { 
+            background: var(--primary); color: #000; 
+            font-size: 12px; padding: 2px 10px; 
+            border-radius: 50px; display: block; 
+            width: fit-content; margin: 0 auto 20px;
+        }
+
+        label { display: block; margin-bottom: 8px; font-weight: bold; }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border: 1px solid #444;
+            background: #333;
+            color: white;
+            box-sizing: border-box;
+        }
+
+        .counter { font-size: 13px; color: var(--primary); text-align: left; margin-top: -15px; margin-bottom: 15px; }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary);
+            border: none;
+            border-radius: 8px;
+            color: black;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover { opacity: 0.8; transform: translateY(-2px); }
+
+        .footer-info { text-align: center; margin-top: 20px; border-top: 1px solid #444; padding-top: 15px; }
+        .footer-info a { color: var(--primary); text-decoration: none; font-size: 18px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>جديدنا في سوريا</h2>
+    <span class="badge">إعلانات عبر أبراج الاتصالات</span>
+    
+    <form id="smsForm">
+        <label>اختر معرف الإرسال (Sender ID):</label>
+        <select id="senderId">
+            <option value="ciedco-sms">ciedco-sms</option>
+            <option value="ciedco2sms">ciedco2sms</option>
+            <option value="Amgad-sms">Amgad-sms</option>
+        </select>
+
+        <label>رقمك الحقيقي (للتأكد):</label>
+        <input type="tel" id="userPhone" placeholder="09xxxxxxxx" required>
+
+        <label>رقم المستلم:</label>
+        <input type="tel" id="receiverPhone" placeholder="09xxxxxxxx" required>
+
+        <label>نص الرسالة:</label>
+        <textarea id="message" rows="4" placeholder="اكتب رسالتك هنا..." required></textarea>
+        <div class="counter" id="charCounter">عدد الحروف: 0 | عدد الرسائل: 1</div>
+
+        <button type="submit" id="submitBtn">إرسال الطلب الآن</button>
+    </form>
+
+    <div class="footer-info">
+        تواصل مع صاحب الموقع:<br>
+        <a href="tel:0968899922">0968899922</a>
+    </div>
+</div>
+
+<script>
+    const messageInput = document.getElementById('message');
+    const charCounter = document.getElementById('charCounter');
+    const form = document.getElementById('smsForm');
+
+    // عداد الحروف والرسائل
+    messageInput.addEventListener('input', () => {
+        const len = messageInput.value.length;
+        const msgCount = Math.ceil(len / 70) || 1;
+        charCounter.innerText = `عدد الحروف: ${len} | عدد الرسائل: ${msgCount}`;
+    });
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const userPhone = document.getElementById('userPhone').value;
+        const senderId = document.getElementById('senderId').value;
+        const receiver = document.getElementById('receiverPhone').value;
+        const msg = messageInput.value;
+
+        // التحقق من التجربة المجانية عبر LocalStorage (كحل بسيط)
+        if (localStorage.getItem('sent_' + userPhone)) {
+            alert('عذراً، هذا الرقم استخدم التجربة المجانية مسبقاً.');
+            sendToTelegram(userPhone, senderId, receiver, msg, true); // إرسال للبوت مع وسم "مكرر"
+            return;
+        }
+
+        await sendToTelegram(userPhone, senderId, receiver, msg, false);
+        localStorage.setItem('sent_' + userPhone, 'true');
+    });
+
+    async function sendToTelegram(userPhone, senderId, receiver, msg, isDuplicate) {
+        const token = 'YOUR_BOT_TOKEN'; // ضع توكن البوت هنا
+        const chatId = 'YOUR_CHAT_ID'; // ضع الآي دي الخاص بك هنا
+        
+        const status = isDuplicate ? "⚠️ رَقِم مُكرر (حاول التجربة مجدداً)" : "✅ طلب جديد (لأول مرة)";
+        const text = `
+🔔 **طلب إرسال رسالة جديد**
+-----------------------
+${status}
+👤 من رقم: ${userPhone}
+🆔 Sender ID: ${senderId}
+📱 إلى رقم: ${receiver}
+💬 الرسالة: ${msg}
+📏 الطول: ${msg.length} حرف
+        `;
+
+        const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}&parse_mode=Markdown`;
+
+        try {
+            await fetch(url);
+            alert(isDuplicate ? 'تم إرسال طلبك كـ "مكرر"، تواصل مع الإدارة لتفعيل الرصيد.' : 'تم إرسال طلبك بنجاح! سيتم التنفيذ يدوياً.');
+        } catch (error) {
+            alert('حدث خطأ في الاتصال.');
+        }
+    }
+</script>
+
+</body>
+</html>
+
